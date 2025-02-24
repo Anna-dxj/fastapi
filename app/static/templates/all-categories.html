@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>All Categories</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script type='module' src='/static/scripts/all-categories.js' defer></script>
+</head>
+<body>
+    <nav class='navbar bg-body-tertiary fixed-top'>
+        <div class='container-fluid'>
+            <div class='navbar-nav d-flex flex-row'>
+                <a href='/products' class='p-1 m-2 nav-link active'>All Products</a>
+                <a href='/categories' class='p-1 m-2 nav-link disabled'>All Categories</a>
+                <a href='/products/add-product' class='p-1 m-2 nav-link active'>Add a Product</a>
+            </div>
+        </div>
+    </nav>
+    <main class='pt-4 m-5'>
+        <h1>Select a category to view products</h1>
+        <div class='row align-items-center justify-content-center m-2'>
+            <div id="all-categories-list" class='row justify-content-center align-items-center'>
+            </div>
+        <!--{% comment %} Repeats, insert via js  {% endcomment %}-->
+        </div>
+    </main>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Update a Product</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script type='module' src='/static/scripts/update-product.js' defer></script>
+    <!--<link rel="stylesheet" href="/static/css/styles.css">-->
+</head>
+<body>
+    <nav class='navbar bg-body-tertiary fixed-top'>
+        <div class='container-fluid'>
+            <div class='navbar-nav d-flex flex-row'>
+                <a href='/products' class='p-1 m-2 nav-link active'>All Products</a>
+                <a href='/categories' class='p-1 m-2 nav-link active'>All Categories</a>
+                <a href='/products/add-product' class='p-1 m-2 nav-link active'>Add a Product</a>
+            </div>
+        </div>
+    </nav>
+    <main class='pt-4 m-5'>
+        <h1>Update a Product</h1>
+        <form>
+            <div class='row align-items-center justify-content-center'>
+                <div class='col-12'>
+                    <label for="product-code" class='form-label'></label>
+                    <input type="number" id="product-code" required placeholder='Product Code' class='form-control'>
+                </div>
+                <div class='col-12'>
+                    <label for="description" class='form-label'></label>
+                    <input type="text" id="description" required placeholder='Product Description' class='form-control'>
+                </div>
+                <div class='col-12'>
+                    <label for="unit-price" class='form-label'></label>
+                    <input type="number" id="unit-price" step="0.01" required placeholder='Unit Price' class='form-control'>
+                </div>
+                <div class='col-12'>
+                    <label for="category"></label>
+                    <select id="category" required class='form-select' aria-label='Select a category'>
+                        <option value="" disabled>Select a category</option>
+                    </select>
+                </div>
+            </div>
+            <div class='d-flex align-items-center justify-content-center flex-column'>
+                <p id='warning-message' class='m-2 p-1 text-danger'></p>
+                <button id='submit-btn' type="submit" class='btn btn-primary m-1'>Update product</button>
+            </div>
+        </form>
+    </main>
+</body>
+</html>
