@@ -20,6 +20,8 @@ const populateCategoryProducts = async () => {
         const categoryData = await fetchData(categoryApiUrl)
     
         if (productData.length > 0 && categoryData.length > 0) {
+            productData.sort((a, b) => a.description.localeCompare(b.description))
+            
             const targetCategory = categoryData.find(category => category.id == categoryId)
 
             titleTxt.innerHTML = `View All Products in ${targetCategory.name}`

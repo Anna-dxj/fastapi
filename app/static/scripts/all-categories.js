@@ -11,6 +11,7 @@ const populateAllCategories = async () => {
         const categoryData = await fetchData(categoryApiUrl)
         
         if (categoryData.length > 0) {
+            categoryData.sort((a, b) => a.name.localeCompare(b.name))
             categoryData.forEach(({name, id}) => {
                 const categoryLink = document.createElement('a')
                 

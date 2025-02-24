@@ -15,6 +15,8 @@ const populateAllProducts = async () => {
 
 
         if (productData.length > 0 && categoryData.length > 0) {
+            productData.sort((a, b) => a.description.localeCompare(b.description))
+
             productData.forEach(({product_code, description, unit_price, categories, id}) => {
                 const productCard = document.createElement('div')
                 
