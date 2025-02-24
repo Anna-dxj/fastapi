@@ -27,7 +27,7 @@ const loadCategories = async () => {
             defaultOption.value = ''
             defaultOption.disabled = true
             defaultOption.textContent = 'Select a Category'
-            defaultOption.selected = true 
+            defaultOption.selected = false 
             
             categoryMenuEl.appendChild(defaultOption)
 
@@ -54,14 +54,17 @@ const loadProductInfo = async () => {
     const productsApiUrl = `http://127.0.0.1:8001/api/products/${productId}`
 
     try {
-        const { product_code, description, unit_price, category_id } = await fetchData(productsApiUrl)
-        const targetCategoryOption = document.querySelector(`#category-${category_id}`)
+        const { product_code, description, unit_price, categories } = await fetchData(productsApiUrl)
+        // const targetCategoryOption = document.querySelector(`#category-${category_id}`)
         
         productCodeInput.value = product_code
         productDescriptionInput.value = description 
         unitPriceInput.value = unit_price 
-        
-        targetCategoryOption.selected = true
+
+        categories.forEach((category) => {
+            const targetCategoryOption = document.querySelector(`#category-${category.id}`)
+            targetCategoryOption.selected = true
+        })
         
     } catch (error) {
         console.error('There was an error finding target product:', error)        

@@ -12,13 +12,12 @@ const populateAllProducts = async () => {
     try{
         const productData = await fetchData(productApiUrl)
         const categoryData = await fetchData(categoryApiUrl)
-    
+
+
         if (productData.length > 0 && categoryData.length > 0) {
-            productData.forEach(({product_code, description, unit_price, category_id, id}) => {
+            productData.forEach(({product_code, description, unit_price, categories, id}) => {
                 const productCard = document.createElement('div')
                 
-                const targetCategory = categoryData.find(category => category.id === category_id)
-    
                 productCard.setAttribute('id', `product-${id}`)
                 productCard.classList.add('card', 'p-3', 'd-flex', 'flex-row', 'justify-content-around', 'align-items-center', 'my-2')
     
@@ -26,7 +25,8 @@ const populateAllProducts = async () => {
                     <div class='d-flex flex-column m-1'>
                         <h2 class='card-title product-description'>${description} - ${product_code}</h2>
                         <p class='card-subtitle text-body-secondary'>$${unit_price.toFixed(2)}</p>
-                        <a href='/categories/${category_id}/products' class='link-offset-1 link-offset-2-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover'>${targetCategory.name}</a>
+                        <div id='product-${id}-category' class='d-flex flex-row align-items-center justify-content-start'>
+                        </div>
                     </div>
                     <div class='d-flex'>
                         <a href='/products/update/${id}' class='btn btn-primary m-2'>Edit</a>
@@ -35,6 +35,21 @@ const populateAllProducts = async () => {
                 `
     
                 allProductsDiv.appendChild(productCard)
+                
+                const categoryDiv = document.querySelector(`#product-${id}-category`)
+                
+                categories.forEach((category, index) => {
+                    const categoryLink = document.createElement('a')
+                    categoryLink.href=`/categories/${category.id}/products`
+                    categoryLink.classList.add('link-offset-1', 'me-2', 'link-offset-2-hover', 'link-underline', 'link-underline-opacity-0', 'link-underline-opacity-75-hover')
+                    
+                    if (index < categories.length - 1) {
+                        categoryLink.textContent = `${category.name},`
+                    } else {
+                        categoryLink.textContent = category.name
+                    }
+                    categoryDiv.appendChild(categoryLink)
+                })
 
                 const delBtn = productCard.querySelector('.del-btn')
                 delBtn.addEventListener('click', () => {

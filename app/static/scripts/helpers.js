@@ -26,7 +26,6 @@ const postData = async (apiUrl, formResponse) => {
             }
             
             const data = await response.json()
-            console.log('Product added:', data)
             return data
         } catch (error) {
             console.error(`Error posting data: ${error}`)
@@ -50,7 +49,6 @@ const updateData = async (productId, formResponse) => {
         }
 
         const data = await response.json()
-        console.log('Product updated:', data)
         return data
     } catch (error) {
         console.error(`Error patching data: ${error}`)
