@@ -1,11 +1,17 @@
-import { fetchData } from './helpers.js';
+import { fetchData, renderPaginationControls } from './helpers.js';
 
 const allCategoriesDiv = document.querySelector('#all-categories-list');
+const paginationDiv = document.querySelector('#pagination-div')
+
+const limit = 40
+let currentPage = 1; 
 
 const populateAllCategories = async () => {
     allCategoriesDiv.innerHTML = ''
+
+    const offset = (currentPage - 1) * limit
     
-    const categoryApiUrl = 'http://127.0.0.1:8001/api/category/'
+    const categoryApiUrl = `http://127.0.0.1:8001/api/category/?limit=${limit}&offset=${offset}`
     
     try {
         const categoryData = await fetchData(categoryApiUrl)
@@ -31,4 +37,15 @@ const populateAllCategories = async () => {
     }
 }
 
-populateAllCategories()
+const renderPage = async () => {
+    await populateAllCategories()
+
+    const categoryUrl = 'http://127.0.0.1:8001/api/category/?limit=0';
+    const totalCategories = await fetchData(categoryUrl)
+    const totalPages = Math.ceil(totalCategories.length / limit)
+
+    renderPaginationControls(paginationDiv, currentPage, totalPages)
+
+}
+
+renderPage()

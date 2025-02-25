@@ -8,8 +8,11 @@ from app.db import get_session_local
 router = APIRouter()
 
 @router.get('/', response_model=list[Product])
-def get_products_route(limit: int = 10, db: Session = Depends(get_session_local)):
-    products = db.query(ProductModel).options(joinedload(ProductModel.categories)).limit(limit).all()
+def get_products_route(limit: int = 10, offset: int=0, db: Session = Depends(get_session_local)):
+    if limit == 0:
+        products = db.query(ProductModel).options(joinedload(ProductModel.categories)).all()
+    else: 
+        products = db.query(ProductModel).options(joinedload(ProductModel.categories)).limit(limit).offset(offset).all()
     return [Product.model_validate(product) for product in products]
 
 @router.get('/{product_id}', response_model=Product)

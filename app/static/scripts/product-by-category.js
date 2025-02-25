@@ -1,19 +1,26 @@
-import { fetchData } from './helpers.js';
+import { fetchData, renderPaginationControls } from './helpers.js';
 
 
 const allProductsDiv = document.getElementById('all-product-list')
 const titleTxt = document.getElementById('title')
+const paginationDiv = document.querySelector('#pagination-div')
 
-const populateCategoryProducts = async () => {
+const limit = 20
+let currentPage = 1; 
+
+const urlParams = window.location.pathname.split('/')
+const categoryId = urlParams[2]
+
+const populateCategoryProducts = async (categoryId) => {
     allProductsDiv.innerHTML = ''
     titleTxt.innerHTML = ''
 
-    const urlParams = window.location.pathname.split('/')
-    const categoryId = urlParams[2]
+    const offset = (currentPage - 1)*limit;
 
 
-    const categoryProductsApiUrl = `http://127.0.0.1:8001/api/category/${categoryId}/products/`
-    const categoryApiUrl = 'http://127.0.0.1:8001/api/category/'
+
+    const categoryProductsApiUrl = `http://127.0.0.1:8001/api/category/${categoryId}/products/?limit=${limit}&offset=${offset}`
+    const categoryApiUrl = 'http://127.0.0.1:8001/api/category/?limit=0'
     
     try{
         const productData = await fetchData(categoryProductsApiUrl)
@@ -92,6 +99,17 @@ const populateCategoryProducts = async () => {
     }
 }
 
+const renderPage = async (categoryId) => {
+    await populateCategoryProducts(categoryId)
+    
+    const totalProductsUrl = `http://127.0.0.1:8001/api/category/${categoryId}/products/?limit=0`
+    const totalProducts = await fetchData(totalProductsUrl)
+    const totalPages = Math.ceil(totalProducts.length / limit )
+
+    renderPaginationControls(paginationDiv, currentPage, totalPages)
+
+}
+
 // Creates modal & shows it
 const createModal = (productId, productName) => {
     const existingModal = document.getElementById('confirm-del-modal')
@@ -164,4 +182,4 @@ const deleteProduct = async (productId, modal) => {
     }
 }
 
-populateCategoryProducts()
+renderPage(categoryId)

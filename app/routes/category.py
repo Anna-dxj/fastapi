@@ -8,8 +8,11 @@ from app.db import get_session_local
 router = APIRouter()
 
 @router.get('/', response_model=list[Category])
-def get_categories_route(limit: int = 10, db: Session = Depends(get_session_local)):
-    return db.query(CategoryModel).limit(limit).all()
+def get_categories_route(limit: int=10, offset: int=0,  db: Session = Depends(get_session_local)):
+   if limit == 0: 
+        return db.query(CategoryModel).all()
+   else: 
+        return db.query(CategoryModel).limit(limit).offset(offset).all()
 
 # Add categories
 @router.post('/', response_model=Category, status_code=status.HTTP_201_CREATED)

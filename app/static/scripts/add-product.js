@@ -8,7 +8,7 @@ const productDescriptionInput= document.querySelector('#description')
 const unitPriceInput= document.querySelector('#unit-price')
 
 const loadCategories = async () => {
-    const categoryApiUrl = 'http://127.0.0.1:8001/api/category/'
+    const categoryApiUrl = 'http://127.0.0.1:8001/api/category/?limit=0'
     warningMsgEl.textContent = '' 
 
     //remove warning 
@@ -52,10 +52,10 @@ const limitDecimal = () => {
     }
 }
 
-const validateForm = async (productCode, productDescription, unitPrice, category) => {
+const validateForm = async (productCode, productDescription, unitPrice, categoryArr) => {
     // Clear validation problems
     let isValid = true
-    const productsApiUrl = 'http://127.0.0.1:8001/api/products/'
+    const productsApiUrl = 'http://127.0.0.1:8001/api/products/?limit=0'
 
     productCodeInput.classList.remove('is-invalid')
     productDescriptionInput.classList.remove('is-invalid')
@@ -79,7 +79,7 @@ const validateForm = async (productCode, productDescription, unitPrice, category
             warningMsgEl.textContent = 'Unit price cannot be empty'
             unitPriceInput.classList.add('is-invalid')
             isValid = false
-        } else if (!category) {
+        } else if (categoryArr.length === 0) {
             warningMsgEl.textContent = 'Must choose a category '
             categoryMenuEl.classList.add('is-invalid')
             isValid = false
@@ -110,7 +110,7 @@ const validateForm = async (productCode, productDescription, unitPrice, category
                 product_code: productCode,
                 description: productDescription,
                 unit_price: unitPrice,
-                category_id: category,
+                category_ids: categoryArr,
             }
         }
 
@@ -129,9 +129,10 @@ const onSubmission = async (e) => {
     const productCodeVal = productCodeInput.value.trim()
     const productDescriptionVal = productDescriptionInput.value.trim()
     const unitPriceVal = unitPriceInput.value.trim()
-    const cateogoryVal = categoryMenuEl.value.trim()
+    const selectedCategoryOptions = Array.from(categoryMenuEl.selectedOptions)
+    const selectedCategoryValues = selectedCategoryOptions.map(category => category.value)
 
-    const validData = await validateForm(productCodeVal, productDescriptionVal, unitPriceVal, cateogoryVal)
+    const validData = await validateForm(productCodeVal, productDescriptionVal, unitPriceVal, selectedCategoryValues)
 
     const productsApiUrl = 'http://127.0.0.1:8001/api/products/add'
     
@@ -147,4 +148,5 @@ const onSubmission = async (e) => {
 loadCategories()
 
 submitBtn.addEventListener('click', onSubmission)
+
 unitPriceInput.addEventListener('blur', limitDecimal)

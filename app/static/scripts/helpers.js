@@ -56,4 +56,23 @@ const updateData = async (productId, formResponse) => {
     }
 
 }
-export { fetchData, postData, updateData }
+
+const renderPaginationControls = (paginationDiv, currentPage, totalPages) => {
+    paginationDiv.innerHTML = ''
+
+    for (let i = 1; i <= totalPages; i++) {
+        const button = document.createElement('button')
+        button.textContent = i; 
+        button.classList.add('btn', 'mx-1', 'btn-secondary')
+        if (i === currentPage) {
+            button.classList.add('disabled')
+        }
+        button.addEventListener('click', () => {
+            currentPage = i 
+            renderPage()
+        })
+        paginationDiv.appendChild(button)
+    }
+}
+
+export { fetchData, postData, updateData, renderPaginationControls}

@@ -1,12 +1,18 @@
-import { fetchData } from './helpers.js';
+import { fetchData, renderPaginationControls } from './helpers.js';
 
 
 const allProductsDiv = document.getElementById('all-product-list')
+const paginationDiv = document.querySelector('#pagination-div')
+
+const limit = 20
+let currentPage = 1; 
 
 const populateAllProducts = async () => {
     allProductsDiv.innerHTML = ''
 
-    const productApiUrl = 'http://127.0.0.1:8001/api/products/'
+    const offset = (currentPage - 1) * limit
+
+    const productApiUrl = `http://127.0.0.1:8001/api/products/?limit=${limit}&offset=${offset}`
     const categoryApiUrl = 'http://127.0.0.1:8001/api/category/'
     
     try{
@@ -68,6 +74,16 @@ const populateAllProducts = async () => {
         console.error(`Error fetching data: ${error}`)
         allProductsDiv.innerHTML = `<p>Failed to load products. Please try again later.</p>`
     }
+}
+
+const renderPage = async () => {
+    await populateAllProducts();
+
+    const totalProductsUrl = 'http://127.0.0.1:8001/api/products/?limit=0'
+    const totalData = await fetchData(totalProductsUrl)
+    const totalPages = Math.ceil(totalData.length / limit)
+
+    renderPaginationControls(paginationDiv, currentPage, totalPages)
 }
 
 // Creates modal & shows it
@@ -142,4 +158,4 @@ const deleteProduct = async (productId, modal) => {
     }
 }
 
-populateAllProducts()
+renderPage()
